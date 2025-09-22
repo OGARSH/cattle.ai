@@ -1,10 +1,6 @@
-# Meowiger - Cattle Breed Recognition Website
+# Cattle.ai - Cattle Breed Recognition Website
 
 A React-based web application for cattle breed recognition with a modern UI built using Vite, TypeScript, and Tailwind CSS.
-
-## 🚀 Live Demo
-
-The website is automatically deployed to GitHub Pages at: `https://[your-username].github.io/Meowiger/`
 
 ## 📁 Project Structure
 
