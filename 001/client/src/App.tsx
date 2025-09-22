@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, Router } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -12,15 +12,27 @@ import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
 import NotFound from "@/pages/not-found";
 
-// Simplified Router without authentication
+// Function to get the base path for GitHub Pages
+const getBasePath = () => {
+  if (typeof window !== 'undefined' && window.location.hostname.includes('github.io')) {
+    return '/cattle.ai';
+  }
+  return '';
+};
+
+// Simplified Router with base path for GitHub Pages
 function AppRouter() {
+  const basePath = getBasePath();
+  
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/about" component={AboutPage} />
-      <Route path="/contact" component={ContactPage} />
-      <Route component={NotFound} />
-    </Switch>
+    <Router base={basePath}>
+      <Switch>
+        <Route path="/" component={Home} />
+        <Route path="/about" component={AboutPage} />
+        <Route path="/contact" component={ContactPage} />
+        <Route component={NotFound} />
+      </Switch>
+    </Router>
   );
 }
 
