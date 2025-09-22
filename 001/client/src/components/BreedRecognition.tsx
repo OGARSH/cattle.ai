@@ -88,72 +88,6 @@ export default function BreedRecognition() {
     }
   };
 
-  // Simple breed mapping for GitHub Pages mode
-  const getBreedInfo = (breedName: string): Partial<BreedResult> => {
-    const breedMap: Record<string, Partial<BreedResult>> = {
-      'gir': {
-        name: "Gir",
-        nameHi: "गिर",
-        lifespan: "12-15",
-        weight: "385-400",
-        height: "130-135",
-        milkCapacity: "10-12",
-        origin: "Gujarat, India",
-        originHi: "गुजरात, भारत",
-        characteristics: [
-          "Distinctive curved horns",
-          "Prominent forehead", 
-          "White with red/brown patches",
-          "Heat tolerant",
-          "Good maternal instincts"
-        ],
-        characteristicsHi: [
-          "विशिष्ट घुमावदार सींग",
-          "प्रमुख माथा",
-          "लाल/भूरे धब्बों के साथ सफेद",
-          "गर्मी सहनशील",
-          "अच्छी मातृत्व प्रवृत्ति"
-        ]
-      },
-      'sahiwal': {
-        name: "Sahiwal",
-        nameHi: "साहीवाल",
-        lifespan: "15-20",
-        weight: "300-400",
-        height: "125-140",
-        milkCapacity: "8-12",
-        origin: "Punjab, Pakistan",
-        originHi: "पंजाब, पाकिस्तान",
-        characteristics: [
-          "Reddish brown color",
-          "Loose skin",
-          "Heat resistant",
-          "Good milk producer"
-        ],
-        characteristicsHi: [
-          "लाल भूरा रंग",
-          "ढीली चमड़ी",
-          "गर्मी प्रतिरोधी",
-          "अच्छी दूध उत्पादक"
-        ]
-      }
-      // Add more breeds as needed
-    };
-
-    return breedMap[breedName.toLowerCase()] || {
-      name: breedName,
-      nameHi: breedName,
-      lifespan: "12-15",
-      weight: "300-400",
-      height: "120-140",
-      milkCapacity: "8-12",
-      origin: "India",
-      originHi: "भारत",
-      characteristics: ["Hardy breed", "Good milk producer", "Heat tolerant"],
-      characteristicsHi: ["मजबूत नस्ल", "अच्छी दूध उत्पादक", "गर्मी सहनशील"]
-    };
-  };
-
   const analyzeImage = async () => {
     if (!selectedFile) return;
 
@@ -165,68 +99,17 @@ export default function BreedRecognition() {
       const isDemoMode = window.location.hostname.includes('github.io') || window.location.hostname === 'ogarsh.tech';
       
       if (isDemoMode) {
-        // GitHub Pages mode: Call Roboflow API directly
-        try {
-          // Convert file to base64
-          const base64 = await new Promise<string>((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              const result = reader.result as string;
-              resolve(result.split(',')[1]); // Remove data:image/...;base64, prefix
-            };
-            reader.readAsDataURL(selectedFile);
-          });
-
-          const response = await fetch(`https://detect.roboflow.com/cattel-scan001-xsyt6/1?api_key=vvQ9oSBp1Q7sB3U2aMFB&name=${encodeURIComponent(selectedFile.name)}`, {
-            method: 'POST',
-            body: base64,
-            headers: {
-              'Content-Type': 'text/plain'
-            }
-          });
-
-          if (!response.ok) {
-            throw new Error(`API request failed: ${response.status}`);
-          }
-
-          const data = await response.json();
-          const prediction = data.predictions?.[0];
-
-          if (!prediction) {
-            throw new Error('No breed detected in the image');
-          }
-
-          // Get breed information from our local mapping
-          const breedInfo = getBreedInfo(prediction.class);
-
-          const result: BreedResult = {
-            name: breedInfo.name || prediction.class,
-            nameHi: breedInfo.nameHi || prediction.class,
-            confidence: Math.round(prediction.confidence * 100),
-            lifespan: breedInfo.lifespan || "12-15",
-            weight: breedInfo.weight || "300-400",
-            height: breedInfo.height || "120-140",
-            milkCapacity: breedInfo.milkCapacity || "8-12",
-            origin: breedInfo.origin || "India",
-            originHi: breedInfo.originHi || "भारत",
-            characteristics: breedInfo.characteristics || ["Hardy breed", "Good milk producer"],
-            characteristicsHi: breedInfo.characteristicsHi || ["मजबूत नस्ल", "अच्छी दूध उत्पादक"]
-          };
-
-          setResult(result);
-          setShowLanguageToggle(true);
-          return;
-        } catch (apiError) {
-          console.error('Roboflow API error:', apiError);
-          // Fallback to mock data if API fails
-          const mockResult: BreedResult = {
-            ...mockBreedData,
-            confidence: 85 + Math.random() * 10
-          };
-          setResult(mockResult);
-          setShowLanguageToggle(true);
-          return;
-        }
+        // Demo mode: simulate analysis with mock data
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate 2-second analysis
+        
+        const mockResult: BreedResult = {
+          ...mockBreedData,
+          confidence: 85 + Math.random() * 10 // Random confidence between 85-95%
+        };
+        
+        setResult(mockResult);
+        setShowLanguageToggle(true);
+        return;
       }
 
       // Production mode: Use real backend API
@@ -240,21 +123,22 @@ export default function BreedRecognition() {
       });
 
       if (!predictResponse.ok) {
-        const errorData = await predictResponse.json();
-        throw new Error(errorData.message || 'Failed to analyze image');
+        const errorData = await predictResponse.json().catch(() => ({ message: 'Network error' }));
+        throw new Error(errorData.message || `Server error: ${predictResponse.status}`);
       }
 
       const prediction = await predictResponse.json();
       const { breed: breedName, confidence } = prediction;
 
       if (!breedName) {
-        throw new Error('Breed could not be identified.');
+        throw new Error('Breed could not be identified from the image.');
       }
 
       // Step 2: Get detailed breed information from our backend
-      const breedInfoResponse = await fetch(`/api/breed/${breedName}`);
+      const breedInfoResponse = await fetch(`/api/breed/${encodeURIComponent(breedName)}`);
       if (!breedInfoResponse.ok) {
-        throw new Error(`Could not fetch details for breed: ${breedName}`);
+        const errorData = await breedInfoResponse.json().catch(() => ({ message: 'Network error' }));
+        throw new Error(errorData.message || `Could not fetch details for breed: ${breedName}`);
       }
       const breedInfo = await breedInfoResponse.json();
 
@@ -337,15 +221,18 @@ export default function BreedRecognition() {
       });
       
       if (!response.ok) {
-        throw new Error('Failed to save record');
+        const errorData = await response.json().catch(() => ({ message: 'Network error' }));
+        throw new Error(errorData.message || 'Failed to save record');
       }
+      
+      const savedRecord = await response.json();
+      console.log('Record saved successfully:', savedRecord);
+      
+  // ...existing code...
       
     } catch (error) {
       console.error("Error saving record:", error);
-      // In demo mode or if save fails, just log it
-      if (window.location.hostname.includes('github.io') || window.location.hostname === 'ogarsh.tech') {
-        console.log("Demo mode: Save functionality not available");
-      }
+  // ...existing code...
     }
   };
 

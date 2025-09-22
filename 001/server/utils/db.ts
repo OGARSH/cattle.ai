@@ -3,8 +3,10 @@ import { JSONFile } from 'lowdb/node';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { fileURLToPath } from 'url';
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// ES modules compatible approach
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const dbPath = path.join(__dirname, '../../db.json');
 
 type Data = {
   users: any[];
@@ -697,7 +699,7 @@ const defaultData: Data = {
   ]
 };
 
-const adapter = new JSONFile<Data>(path.join(__dirname, '..', 'db.json'));
+const adapter = new JSONFile<Data>(dbPath);
 const db = new Low(adapter, defaultData);
 
 // In-memory cache for breeds
@@ -721,6 +723,32 @@ export const getBreeds = async () => {
 export const reloadBreeds = async () => {
   await db.read();
   breedsCache = db.data.breeds;
+};
+
+// History management functions
+export const getHistory = async () => {
+  await db.read();
+  return db.data.history || [];
+};
+
+export const addHistoryRecord = async (record: any) => {
+  await db.read();
+  db.data.history = db.data.history || [];
+  db.data.history.push(record);
+  await db.write();
+  return record;
+};
+
+export const removeHistoryRecord = async (recordId: string) => {
+  await db.read();
+  db.data.history = db.data.history || [];
+  const initialLength = db.data.history.length;
+  db.data.history = db.data.history.filter((record: any) => record.id !== recordId);
+  const removed = db.data.history.length < initialLength;
+  if (removed) {
+    await db.write();
+  }
+  return removed;
 };
 
 export default db;

@@ -6,18 +6,6 @@ import { useLanguage } from "./LanguageProvider";
 export default function Footer() {
   const { t } = useLanguage();
 
-  // Function to get the correct navigation path
-  const getNavPath = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const hostname = window.location.hostname;
-      // For production deployment with base path
-      if (hostname.includes('github.io') || hostname === 'ogarsh.tech') {
-        return path === '/' ? '/cattle.ai/' : `/cattle.ai${path}`;
-      }
-    }
-    return path;
-  };
-
   const navItems = [
     { path: "/", label: "Home" },
     { path: "/about", label: "About Us" },
@@ -29,7 +17,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 text-muted-foreground">
         <div className="flex items-center mb-4 flex-wrap gap-4 justify-center">
           {/* Meowiger Logo and Text - Left Aligned */}
-          <Link href={getNavPath("/")} className="flex items-center space-x-2 w-fit group">
+          <Link href="/" className="flex items-center space-x-2 w-fit group">
             <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
               <span className="text-primary-foreground font-bold text-xl">M</span>
             </div>
@@ -41,7 +29,7 @@ export default function Footer() {
             {navItems.map((item) => (
               <Link
                 key={item.path}
-                href={getNavPath(item.path)}
+                href={item.path}
                 className="text-sm font-semibold tracking-wide uppercase hover:text-primary hover:underline underline-offset-4 transition-colors duration-150 px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-primary/40 shadow-sm text-foreground"
               >
                 {item.label}

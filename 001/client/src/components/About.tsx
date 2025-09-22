@@ -3,7 +3,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Linkedin } from "lucide-react";
 import { useLanguage } from "./LanguageProvider";
-import { getAssetPath } from "@/lib/utils";
 
 interface TeamMember {
   name: string;
@@ -111,7 +110,7 @@ export default function About() {
                 <div className="flex flex-col items-center text-center space-y-4">
                   {/* Profile Image Placeholder */}
                   <Avatar className="h-20 w-20">
-                    <AvatarImage src={member.image ? getAssetPath(member.image) : undefined} alt={member.name} />
+                    <AvatarImage src={member.image} alt={member.name} />
                     <AvatarFallback className="text-lg font-semibold">
                       {getInitials(member.name)}
                     </AvatarFallback>

@@ -1,0 +1,23 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Start Backend (ts-node)",
+			"type": "shell",
+			"command": "npx ts-node server/index.ts",
+			"args": [],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Start Backend (nodemon)",
+			"type": "shell",
+			"command": "npx nodemon --watch server --ext ts,json server/index.ts",
+			"args": [],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		}
+	]
+}
