@@ -38,9 +38,18 @@ jobs:
           cd 001
           npm run build
           
+      - name: Copy CNAME to output
+        run: |
+          cp 001/client/public/CNAME 001/dist/public/CNAME || echo "No CNAME file"
+          
       - name: Add 404.html for client-side routing
         run: |
           cp 001/dist/public/index.html 001/dist/public/404.html
+          
+      - name: List output files for debugging
+        run: |
+          echo "Files in dist/public:"
+          ls -la 001/dist/public/
           
       - name: Setup Pages
         uses: actions/configure-pages@v4
