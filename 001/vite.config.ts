@@ -34,10 +34,16 @@ export default defineConfig({
         target: 'http://localhost:3001',
         changeOrigin: true,
       },
+      '/attached_assets': {
+        target: 'http://localhost:5173',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/attached_assets/, '/attached_assets')
+      }
     },
     fs: {
       strict: true,
       deny: ["**/.*"],
+      allow: [".."]
     },
   },
 });

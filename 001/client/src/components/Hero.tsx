@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "./LanguageProvider";
-import heroImage from "@assets/generated_images/Indian_cattle_pastoral_landscape_5aca80ee.png";
 
 export default function Hero() {
   const { t } = useLanguage();
@@ -32,7 +31,7 @@ export default function Hero() {
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: `linear-gradient(120deg, rgba(20, 20, 20, 0.55) 0%, rgba(34, 70, 45, 0.35) 50%, rgba(30, 30, 30, 0.65) 100%), url(${heroImage})`,
+          backgroundImage: `linear-gradient(120deg, rgba(20, 20, 20, 0.55) 0%, rgba(34, 70, 45, 0.35) 50%, rgba(30, 30, 30, 0.65) 100%), url('/images/Indian_cattle_pastoral_landscape_5aca80ee.png')`,
           animation: 'gradientMove 10s ease-in-out infinite',
         }}
       />
@@ -44,7 +43,7 @@ export default function Hero() {
         <h1 className="text-4xl md:text-6xl font-bold mb-6 mx-auto leading-tight drop-shadow-2xl text-white animate-slide-in-down">
           {t("hero.title")}
         </h1>
-        <p className="text-lg md:text-xl mb-8 mx-auto text-gray-100/90 font-medium animate-fade-in">
+        <p className="text-lg md:text-xl mb-8 mx-auto text-gray-100/90 font-medium">
           {t("hero.subtitle")}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

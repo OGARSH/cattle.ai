@@ -30,7 +30,7 @@ function App() {
       <TooltipProvider>
         <ThemeProvider defaultTheme="light" storageKey="cattle-app-theme">
           <LanguageProvider defaultLanguage="en">
-            <div className="min-h-screen flex flex-col">
+            <div className="min-h-screen flex flex-col bg-background text-foreground">
               <Header />
               <main className="flex-1">
                 <AppRouter />

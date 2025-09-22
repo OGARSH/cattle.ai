@@ -3,21 +3,9 @@ import BreedRecognition from "@/components/BreedRecognition";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Camera, Users, History, Shield, LogIn, PlusCircle } from "lucide-react";
 import { useLanguage } from "@/components/LanguageProvider";
-import { useEffect } from "react";
-import { useLocation } from "wouter";
 
 export default function Home() {
   const { t } = useLanguage();
-  const [location] = useLocation();
-
-  useEffect(() => {
-    if (location.hash === "#features") {
-      // Add a small delay to ensure the element is rendered
-      setTimeout(() => {
-        document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    }
-  }, [location]);
 
   const features = [
     {
