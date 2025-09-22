@@ -12,10 +12,14 @@ import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
 import NotFound from "@/pages/not-found";
 
-// Function to get the base path for GitHub Pages
+// Function to get the base path for GitHub Pages and custom domains
 const getBasePath = () => {
-  if (typeof window !== 'undefined' && window.location.hostname.includes('github.io')) {
-    return '/cattle.ai';
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    // Check for both GitHub Pages and custom domains
+    if (hostname.includes('github.io') || hostname === 'ogarsh.tech') {
+      return '/cattle.ai';
+    }
   }
   return '';
 };
