@@ -38,6 +38,10 @@ jobs:
           cd 001
           npm run build
           
+      - name: Add 404.html for client-side routing
+        run: |
+          cp 001/dist/public/index.html 001/dist/public/404.html
+          
       - name: Setup Pages
         uses: actions/configure-pages@v4
         
