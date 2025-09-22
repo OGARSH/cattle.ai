@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cattle AI - Simple Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            text-align: center; 
+        }
+        .card { 
+            background: rgba(255,255,255,0.1); 
+            padding: 30px; 
+            border-radius: 15px; 
+            margin: 20px 0; 
+            backdrop-filter: blur(10px);
+        }
+        .btn { 
+            background: #4CAF50; 
+            color: white; 
+            padding: 12px 24px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 16px;
+            margin: 10px;
+        }
+        .btn:hover { background: #45a049; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>🐄 Cattle AI - Breed Recognition</h1>
+            <p>AI-powered cattle and buffalo breed identification for field workers</p>
+            <button class="btn" onclick="showInfo()">Test Button</button>
+        </div>
+        
+        <div class="card">
+            <h2>Upload Test</h2>
+            <input type="file" accept="image/*" onchange="handleFile(this)" style="margin: 10px;">
+            <div id="result" style="margin-top: 20px;"></div>
+        </div>
+        
+        <div class="card">
+            <h3>Debug Info</h3>
+            <p>Domain: <span id="domain"></span></p>
+            <p>Path: <span id="path"></span></p>
+            <p>Time: <span id="time"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Debug info
+        document.getElementById('domain').textContent = window.location.hostname;
+        document.getElementById('path').textContent = window.location.pathname;
+        document.getElementById('time').textContent = new Date().toLocaleString();
+        
+        function showInfo() {
+            alert('Button works! Site is functioning correctly.');
+        }
+        
+        function handleFile(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                document.getElementById('result').innerHTML = 
+                    `<p>File selected: ${file.name}</p>
+                     <p>Size: ${(file.size/1024).toFixed(2)} KB</p>
+                     <p>Type: ${file.type}</p>
+                     <p style="color: #4CAF50;">✅ File upload is working!</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
